@@ -1,4 +1,3 @@
-import com.formdev.flatlaf.themes.FlatMacDarkLaf
 import java.awt.Color
 import java.awt.Font
 import javax.swing.*
@@ -7,7 +6,7 @@ import javax.swing.*
  * Application entry point
  */
 fun main() {
-    FlatMacDarkLaf.setup()          // Initialise the LAF
+     UIManager.setLookAndFeel("com.jtattoo.plaf.luna.LunaLookAndFeel")   // Initialise the LAF
 
     val app = App()                 // Get an app state object
     val window = MainWindow(app)    // Spawn the UI, passing in the app state
@@ -87,6 +86,7 @@ class MainWindow(val app: App) {
         clickButton.background = Color(0xcc0055)
 
         infoButton.font = Font(Font.SANS_SERIF, Font.PLAIN, 20)
+
     }
 
     private fun setupWindow() {
@@ -94,7 +94,8 @@ class MainWindow(val app: App) {
         frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE  // Exit upon window close
         frame.contentPane = panel                           // Define the main content
         frame.pack()
-        frame.setLocationRelativeTo(null)                   // Centre on the screen
+        val screenSize = java.awt.Toolkit.getDefaultToolkit().screenSize
+        frame.setSize(screenSize.width, screenSize.height)
     }
 
     private fun setupActions() {
@@ -170,6 +171,7 @@ class InfoWindow(val owner: MainWindow, val app: App) {
 
     private fun setupWindow() {
         dialog.isResizable = false                              // Can't resize
+        dialog.isAlwaysOnTop = true
         dialog.defaultCloseOperation = JDialog.HIDE_ON_CLOSE    // Hide upon window close
         dialog.contentPane = panel                              // Main content panel
         dialog.pack()
@@ -192,12 +194,6 @@ class InfoWindow(val owner: MainWindow, val app: App) {
     }
 
     fun show() {
-        val ownerBounds = owner.frame.bounds          // get location of the main window
-        dialog.setLocation(                           // Position next to main window
-            ownerBounds.x + ownerBounds.width + 10,
-            ownerBounds.y
-        )
-
         dialog.isVisible = true
     }
 }

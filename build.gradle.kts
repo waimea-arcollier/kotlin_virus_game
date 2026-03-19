@@ -16,8 +16,9 @@ application {
 }
 
 dependencies {
-    implementation("com.formdev:flatlaf:3.6.2")
-    implementation("com.formdev:flatlaf-intellij-themes:3.6.2")
+//    implementation("com.formdev:flatlaf:3.6.2")
+//    implementation("com.formdev:flatlaf-intellij-themes:3.6.2")
+    implementation("com.jtattoo:JTattoo:1.6.12")
 }
 
 
