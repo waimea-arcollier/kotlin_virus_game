@@ -87,38 +87,38 @@ class App {
  */
 class MainWindow(val app: App) {
     val frame = JFrame("WINDOWS XP HOME")
-    val bgIcon = ImageIcon(ClassLoader.getSystemResource("images/main-bg.png"))
     val solitaireIcon = ImageIcon(ClassLoader.getSystemResource("images/solitaire-icon.png")).scaled(80, 80)
     private val panel = JPanel().apply { layout = null }
 
-    private val titleLabel = JLabel()
-    private val bgLabel = JLabel(bgIcon)
+    private var bgLabel = JLabel()
 
     private val solitaireButton = JButton("Solitaire", solitaireIcon)
 
     private val solitaireWindow = SolitaireWindow(this, app)      // Pass app state to dialog too
 
     init {
+        setupWindow()
         setupLayout()
         setupStyles()
         setupActions()
-        setupWindow()
         updateUI()
     }
 
     private fun setupLayout() {
+        val bgIcon = ImageIcon(ClassLoader.getSystemResource("images/main-bg.png")).scaled(frame.width, frame.height)
         panel.preferredSize = java.awt.Dimension(400, 1000)
+        bgLabel = JLabel(bgIcon)
 
-        titleLabel.setBounds(30, 30, 340, 30)
-        solitaireButton.setBounds(30, 30, 80, 100)
+        bgLabel.setBounds(0, 0, frame.width, frame.height)
 
+        solitaireButton.setBounds(10, 300, 120, 150)
+//        (10, 30), (10, 190), (10,350), (10,510), (10, 670)
 
-        panel.add(titleLabel)
-        panel.add(solitaireButton)
+        panel.add(bgLabel)
+        bgLabel.add(solitaireButton)
     }
 
     private fun setupStyles() {
-        titleLabel.font = Font(Font.SANS_SERIF, Font.BOLD, 32)
 
         solitaireButton.verticalTextPosition = SwingConstants.BOTTOM
         solitaireButton.horizontalTextPosition = SwingConstants.CENTER
@@ -126,14 +126,13 @@ class MainWindow(val app: App) {
         solitaireButton.isFocusPainted = false
         solitaireButton.isContentAreaFilled = false
 
+        bgLabel.isVisible = true
     }
 
     private fun setupWindow() {
         frame.isResizable = false                           // Can't resize
         frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE  // Exit upon window close
         frame.contentPane = panel                           // Define the main content\
-        bgLabel.setBounds(0, 0, frame.width, frame.height)
-        frame.add(bgLabel)
         frame.pack()
         val screenSize = java.awt.Toolkit.getDefaultToolkit().screenSize
         frame.setSize(screenSize.width, screenSize.height)
@@ -183,7 +182,7 @@ class SolitaireWindow(val owner: MainWindow, val app: App) {
     var cookieCollected: Boolean = false
 
     init {
-        bgBeforeIcon = ImageIcon(ClassLoader.getSystemResource("images/solitaire-before.png")).scaled(240, 180)
+        bgBeforeIcon = ImageIcon(ClassLoader.getSystemResource("images/solitaire-before.png")).scaled(600,450)
         bgAfterIcon = ImageIcon(ClassLoader.getSystemResource("images/solitaire-after.png"))
         cookieImageIcon = ImageIcon(ClassLoader.getSystemResource("images/notes-icon.png"))
 
@@ -201,9 +200,9 @@ class SolitaireWindow(val owner: MainWindow, val app: App) {
     }
 
     private fun setupLayout() {
-        panel.preferredSize = java.awt.Dimension(240, 180)
+        panel.preferredSize = java.awt.Dimension(600,450)
 
-        backLabel.setBounds(0, 0, 240, 180)
+        backLabel.setBounds(0, 0, 600, 450)
         panel.add(backLabel)
 
         backLabel.icon = bgBeforeIcon
