@@ -1,3 +1,4 @@
+import java.awt.Cursor
 import java.awt.Font
 import java.awt.Point
 import javax.swing.*
@@ -111,7 +112,8 @@ class MainWindow(val app: App) {
 
         bgLabel.setBounds(0, 0, frame.width, frame.height)
 
-        solitaireButton.setBounds(10, 300, 120, 150)
+        solitaireButton.setBounds(10, 300, 80, 100)
+        solitaireButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
 //        (10, 30), (10, 190), (10,350), (10,510), (10, 670)
 
         panel.add(bgLabel)
@@ -139,11 +141,11 @@ class MainWindow(val app: App) {
     }
 
     private fun setupActions() {
-        solitaireButton.addActionListener { handleInfoClick() }
+        solitaireButton.addActionListener { handleIconClick() }
     }
 
 
-    private fun handleInfoClick() {
+    private fun handleIconClick() {
         solitaireWindow.show()
     }
 
@@ -169,10 +171,7 @@ class SolitaireWindow(val owner: MainWindow, val app: App) {
     private val panel = JPanel().apply { layout = null }
 
     private val backLabel = JLabel()
-
-    val targetLocation: Point
-    val targetWidth: Int
-    val targetHeight: Int
+    private val targetButton = JButton()
 
     val cookieLocation: Point
 
@@ -183,12 +182,8 @@ class SolitaireWindow(val owner: MainWindow, val app: App) {
 
     init {
         bgBeforeIcon = ImageIcon(ClassLoader.getSystemResource("images/solitaire-before.png")).scaled(600,450)
-        bgAfterIcon = ImageIcon(ClassLoader.getSystemResource("images/solitaire-after.png"))
+        bgAfterIcon = ImageIcon(ClassLoader.getSystemResource("images/solitaire-after.png")).scaled(600,450)
         cookieImageIcon = ImageIcon(ClassLoader.getSystemResource("images/notes-icon.png"))
-
-        targetLocation = Point(30, 30)
-        targetWidth = 30
-        targetHeight = 30
 
         cookieLocation = Point(30, 30)
 
@@ -203,13 +198,19 @@ class SolitaireWindow(val owner: MainWindow, val app: App) {
         panel.preferredSize = java.awt.Dimension(600,450)
 
         backLabel.setBounds(0, 0, 600, 450)
-        panel.add(backLabel)
-
         backLabel.icon = bgBeforeIcon
+
+        targetButton.setBounds(20, 10, 70, 100)
+        targetButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+
+        panel.add(targetButton)
+        panel.add(backLabel)
     }
 
     private fun setupStyles() {
-
+        targetButton.isBorderPainted = false
+        targetButton.isFocusPainted = false
+        targetButton.isContentAreaFilled = false
     }
 
     private fun setupWindow() {
@@ -222,11 +223,14 @@ class SolitaireWindow(val owner: MainWindow, val app: App) {
     }
 
     private fun setupActions() {
-
+        targetButton.addActionListener {handleCardClick()}
     }
 
-    private fun handleResetClick() { // Update the app state
-        owner.updateUI()    // Update the UI to reflect this, via the main window
+    private fun handleCardClick() { // Update the app state
+        targetButton.isEnabled = false
+        backLabel.icon = bgAfterIcon
+
+//      cookieButton.isVisible = true
     }
 
     fun updateUI() {
