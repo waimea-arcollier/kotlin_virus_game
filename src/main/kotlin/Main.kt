@@ -145,7 +145,7 @@ class MainWindow(val app: App) {
     }
 
     private fun handleMineClick() {
-        minesweeperWindow.dialog.setLocation(20,20)
+        minesweeperWindow.dialog.setLocation(1200,200)
         minesweeperWindow.show()
     }
 
@@ -294,7 +294,7 @@ class MinesweeperWindow(val owner: MainWindow, val app: App) {
     init {
         bgBeforeIcon = ImageIcon(ClassLoader.getSystemResource("images/minesweeper-before.png")).scaled(300,350)
         bgAfterIcon = ImageIcon(ClassLoader.getSystemResource("images/minesweeper-after.png")).scaled(300,350)
-        cookieImageIcon = ImageIcon(ClassLoader.getSystemResource("images/cookie-5.png")).scaled(40, 40)
+        cookieImageIcon = ImageIcon(ClassLoader.getSystemResource("images/cookie-5.png")).scaled(125, 125)
 
         setupLayout()
         setupStyles()
@@ -316,7 +316,7 @@ class MinesweeperWindow(val owner: MainWindow, val app: App) {
         targetButton.setBounds(50, 100, 200, 200)
         targetButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
 
-        cookieButton.setBounds(30, 40, 40, 40)
+        cookieButton.setBounds(85, 135, 125, 125)
         cookieButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
         cookieButton.icon = cookieImageIcon
 
@@ -326,7 +326,111 @@ class MinesweeperWindow(val owner: MainWindow, val app: App) {
     }
 
     private fun setupStyles() {
-        targetButton.isBorderPainted = true
+        targetButton.isBorderPainted = false
+        targetButton.isFocusPainted = false
+        targetButton.isContentAreaFilled = false
+
+        cookieButton.isBorderPainted = false
+        cookieButton.isFocusPainted = false
+        cookieButton.isContentAreaFilled = false
+        cookieButton.isVisible = false
+    }
+
+    private fun setupWindow() {
+        dialog.isResizable = false                              // Can't resize
+        dialog.isAlwaysOnTop = true
+        dialog.defaultCloseOperation = JDialog.HIDE_ON_CLOSE    // Hide upon window close
+        dialog.contentPane = panel // Main content panel
+        dialog.setLocationRelativeTo(null)
+        dialog.pack()
+    }
+
+    private fun setupActions() {
+        targetButton.addActionListener {handleCardClick()}
+
+        cookieButton.addActionListener {handleCookieClick()}
+    }
+
+    private fun handleCardClick() {
+        targetButton.isEnabled = false
+        backLabel.icon = bgAfterIcon
+
+        cookieButton.isVisible = true
+    }
+
+    private fun handleCookieClick() {
+        cookieButton.isEnabled = false
+        cookieButton.isVisible = false
+
+
+        app.cookieCollected()
+        owner.checkIfGameWon()
+    }
+
+    fun updateUI() {
+
+    }
+
+    fun show() {
+        dialog.isVisible = true
+    }
+}
+
+/**
+ * Info UI window is a child dialog and shows how the
+ * app state can be shown / updated from multiple places
+ *
+ * @param owner the parent frame, used to position and layer the dialog correctly
+ * @param app the app state object
+ */
+class MinesweeperWindow(val owner: MainWindow, val app: App) {
+    val dialog = JDialog(owner.frame, "Minesweeper", false)
+    private val panel = JPanel().apply { layout = null }
+
+    private val backLabel = JLabel()
+    private val targetButton = JButton()
+    private val cookieButton = JButton()
+
+    val bgBeforeIcon: ImageIcon
+    val bgAfterIcon: ImageIcon
+    val cookieImageIcon: ImageIcon
+
+    init {
+        bgBeforeIcon = ImageIcon(ClassLoader.getSystemResource("images/minesweeper-before.png")).scaled(300,350)
+        bgAfterIcon = ImageIcon(ClassLoader.getSystemResource("images/minesweeper-after.png")).scaled(300,350)
+        cookieImageIcon = ImageIcon(ClassLoader.getSystemResource("images/cookie-5.png")).scaled(125, 125)
+
+        setupLayout()
+        setupStyles()
+        setupActions()
+        setupWindow()
+        updateUI()
+    }
+
+    fun hide() {
+        dialog.isVisible = false
+    }
+
+    private fun setupLayout() {
+        panel.preferredSize = java.awt.Dimension(300,350)
+
+        backLabel.setBounds(0, 0, 300, 350)
+        backLabel.icon = bgBeforeIcon
+
+        targetButton.setBounds(50, 100, 200, 200)
+        targetButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+
+        cookieButton.setBounds(85, 135, 125, 125)
+        cookieButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        cookieButton.icon = cookieImageIcon
+
+        panel.add(cookieButton)
+        panel.add(targetButton)
+        panel.add(backLabel)
+    }
+
+    private fun setupStyles() {
+        targetButton.isBorderPainted = false
         targetButton.isFocusPainted = false
         targetButton.isContentAreaFilled = false
 
