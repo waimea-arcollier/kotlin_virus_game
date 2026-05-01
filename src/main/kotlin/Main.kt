@@ -1,6 +1,4 @@
 import java.awt.Cursor
-import java.awt.Font
-import java.awt.Point
 import javax.swing.*
 
 
@@ -44,40 +42,21 @@ fun main() {
 /**
  * Manage app state
  *
- * @property name the user's name
- * @property score the points earned
+ * @property
+ * @property
  */
 class App {
-    var name = "Test"
-    var score = 0
+    var cookiesFound = 0
 
-//    val solitaireWindow: Window
-//    val minesweeperWindow: Window
+    fun cookieCollected() {
+        cookiesFound++
 
-    init {
-//        solitaireWindow = Window(
-//            "solitaire",
-//            "solitaire-before",
-//            "solitaire-after",
-//            Point(30, 30),
-//            30,
-//            60,
-//            "solitaire-cookie",
-//            Point(30,30)
-//        )
-//        minesweeperWindow = Window(
-//            "minesweeper",
-//            "minesweeper-before",
-//            "minesweeper-after",
-//            Point(30, 30),
-//            30,
-//            60,
-//            "minesweeper-cookie",
-//            Point(30,30)
-//        )
-
+        println("Found a cookie! $cookiesFound found so far")
     }
 
+    fun gameWon(): Boolean {
+        return cookiesFound == 5
+    }
 }
 
 
@@ -89,13 +68,17 @@ class App {
 class MainWindow(val app: App) {
     val frame = JFrame("WINDOWS XP HOME")
     val solitaireIcon = ImageIcon(ClassLoader.getSystemResource("images/solitaire-icon.png")).scaled(80, 80)
+    val minesweeperIcon = ImageIcon(ClassLoader.getSystemResource("images/minesweeper-icon.png")).scaled(80, 80)
     private val panel = JPanel().apply { layout = null }
 
     private var bgLabel = JLabel()
 
     private val solitaireButton = JButton("Solitaire", solitaireIcon)
-
     private val solitaireWindow = SolitaireWindow(this, app)      // Pass app state to dialog too
+
+    private val minesweeperButton = JButton("Minesweeper", minesweeperIcon)
+    private val minesweeperWindow = MinesweeperWindow(this, app)
+
 
     init {
         setupWindow()
@@ -114,10 +97,14 @@ class MainWindow(val app: App) {
 
         solitaireButton.setBounds(10, 300, 80, 100)
         solitaireButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+
+        minesweeperButton.setBounds(10, 190, 80, 100)
+        minesweeperButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
 //        (10, 30), (10, 190), (10,350), (10,510), (10, 670)
 
         panel.add(bgLabel)
         bgLabel.add(solitaireButton)
+        bgLabel.add(minesweeperButton)
     }
 
     private fun setupStyles() {
@@ -127,6 +114,12 @@ class MainWindow(val app: App) {
         solitaireButton.isBorderPainted = false
         solitaireButton.isFocusPainted = false
         solitaireButton.isContentAreaFilled = false
+
+        minesweeperButton.verticalTextPosition = SwingConstants.BOTTOM
+        minesweeperButton.horizontalTextPosition = SwingConstants.CENTER
+        minesweeperButton.isBorderPainted = false
+        minesweeperButton.isFocusPainted = false
+        minesweeperButton.isContentAreaFilled = false
 
         bgLabel.isVisible = true
     }
@@ -141,20 +134,36 @@ class MainWindow(val app: App) {
     }
 
     private fun setupActions() {
-        solitaireButton.addActionListener { handleIconClick() }
+        solitaireButton.addActionListener { handleSolClick() }
+        minesweeperButton.addActionListener { handleMineClick() }
     }
 
 
-    private fun handleIconClick() {
+    private fun handleSolClick() {
+        solitaireWindow.dialog.setLocation(400,200)
         solitaireWindow.show()
     }
 
+    private fun handleMineClick() {
+        minesweeperWindow.dialog.setLocation(20,20)
+        minesweeperWindow.show()
+    }
+
     fun updateUI() {
-        solitaireWindow.updateUI()       // Keep child dialog window UI up-to-date too
+        solitaireWindow.updateUI() // Keep child dialog window UI up-to-date too
+        minesweeperWindow.updateUI()
     }
 
     fun show() {
         frame.isVisible = true
+    }
+
+    fun checkIfGameWon() {
+        if (app.gameWon()) {
+            solitaireWindow.hide()
+            minesweeperWindow.hide()
+            JOptionPane.showMessageDialog(frame, "Game Won", "Game Over!",  JOptionPane.INFORMATION_MESSAGE)
+        }
     }
 }
 
@@ -167,31 +176,31 @@ class MainWindow(val app: App) {
  * @param app the app state object
  */
 class SolitaireWindow(val owner: MainWindow, val app: App) {
-    private val dialog = JDialog(owner.frame, "Solitaire", false)
+    val dialog = JDialog(owner.frame, "Solitaire", false)
     private val panel = JPanel().apply { layout = null }
 
     private val backLabel = JLabel()
     private val targetButton = JButton()
-
-    val cookieLocation: Point
+    private val cookieButton = JButton()
 
     val bgBeforeIcon: ImageIcon
     val bgAfterIcon: ImageIcon
     val cookieImageIcon: ImageIcon
-    var cookieCollected: Boolean = false
 
     init {
         bgBeforeIcon = ImageIcon(ClassLoader.getSystemResource("images/solitaire-before.png")).scaled(600,450)
         bgAfterIcon = ImageIcon(ClassLoader.getSystemResource("images/solitaire-after.png")).scaled(600,450)
-        cookieImageIcon = ImageIcon(ClassLoader.getSystemResource("images/notes-icon.png"))
-
-        cookieLocation = Point(30, 30)
+        cookieImageIcon = ImageIcon(ClassLoader.getSystemResource("images/cookie-4.png")).scaled(40, 40)
 
         setupLayout()
         setupStyles()
         setupActions()
         setupWindow()
         updateUI()
+    }
+
+    fun hide() {
+        dialog.isVisible = false
     }
 
     private fun setupLayout() {
@@ -203,6 +212,11 @@ class SolitaireWindow(val owner: MainWindow, val app: App) {
         targetButton.setBounds(20, 10, 70, 100)
         targetButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
 
+        cookieButton.setBounds(30, 40, 40, 40)
+        cookieButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        cookieButton.icon = cookieImageIcon
+
+        panel.add(cookieButton)
         panel.add(targetButton)
         panel.add(backLabel)
     }
@@ -211,6 +225,11 @@ class SolitaireWindow(val owner: MainWindow, val app: App) {
         targetButton.isBorderPainted = false
         targetButton.isFocusPainted = false
         targetButton.isContentAreaFilled = false
+
+        cookieButton.isBorderPainted = false
+        cookieButton.isFocusPainted = false
+        cookieButton.isContentAreaFilled = false
+        cookieButton.isVisible = false
     }
 
     private fun setupWindow() {
@@ -224,13 +243,128 @@ class SolitaireWindow(val owner: MainWindow, val app: App) {
 
     private fun setupActions() {
         targetButton.addActionListener {handleCardClick()}
+
+        cookieButton.addActionListener {handleCookieClick()}
     }
 
-    private fun handleCardClick() { // Update the app state
+    private fun handleCardClick() {
         targetButton.isEnabled = false
         backLabel.icon = bgAfterIcon
 
-//      cookieButton.isVisible = true
+        cookieButton.isVisible = true
+    }
+
+    private fun handleCookieClick() {
+        cookieButton.isEnabled = false
+        cookieButton.isVisible = false
+
+
+        app.cookieCollected()
+        owner.checkIfGameWon()
+    }
+
+    fun updateUI() {
+
+    }
+
+    fun show() {
+        dialog.isVisible = true
+    }
+}
+
+/**
+ * Info UI window is a child dialog and shows how the
+ * app state can be shown / updated from multiple places
+ *
+ * @param owner the parent frame, used to position and layer the dialog correctly
+ * @param app the app state object
+ */
+class MinesweeperWindow(val owner: MainWindow, val app: App) {
+    val dialog = JDialog(owner.frame, "Minesweeper", false)
+    private val panel = JPanel().apply { layout = null }
+
+    private val backLabel = JLabel()
+    private val targetButton = JButton()
+    private val cookieButton = JButton()
+
+    val bgBeforeIcon: ImageIcon
+    val bgAfterIcon: ImageIcon
+    val cookieImageIcon: ImageIcon
+
+    init {
+        bgBeforeIcon = ImageIcon(ClassLoader.getSystemResource("images/minesweeper-before.png")).scaled(300,350)
+        bgAfterIcon = ImageIcon(ClassLoader.getSystemResource("images/minesweeper-after.png")).scaled(300,350)
+        cookieImageIcon = ImageIcon(ClassLoader.getSystemResource("images/cookie-5.png")).scaled(40, 40)
+
+        setupLayout()
+        setupStyles()
+        setupActions()
+        setupWindow()
+        updateUI()
+    }
+
+    fun hide() {
+        dialog.isVisible = false
+    }
+
+    private fun setupLayout() {
+        panel.preferredSize = java.awt.Dimension(300,350)
+
+        backLabel.setBounds(0, 0, 300, 350)
+        backLabel.icon = bgBeforeIcon
+
+        targetButton.setBounds(50, 100, 200, 200)
+        targetButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+
+        cookieButton.setBounds(30, 40, 40, 40)
+        cookieButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        cookieButton.icon = cookieImageIcon
+
+        panel.add(cookieButton)
+        panel.add(targetButton)
+        panel.add(backLabel)
+    }
+
+    private fun setupStyles() {
+        targetButton.isBorderPainted = true
+        targetButton.isFocusPainted = false
+        targetButton.isContentAreaFilled = false
+
+        cookieButton.isBorderPainted = false
+        cookieButton.isFocusPainted = false
+        cookieButton.isContentAreaFilled = false
+        cookieButton.isVisible = false
+    }
+
+    private fun setupWindow() {
+        dialog.isResizable = false                              // Can't resize
+        dialog.isAlwaysOnTop = true
+        dialog.defaultCloseOperation = JDialog.HIDE_ON_CLOSE    // Hide upon window close
+        dialog.contentPane = panel // Main content panel
+        dialog.setLocationRelativeTo(null)
+        dialog.pack()
+    }
+
+    private fun setupActions() {
+        targetButton.addActionListener {handleCardClick()}
+
+        cookieButton.addActionListener {handleCookieClick()}
+    }
+
+    private fun handleCardClick() {
+        targetButton.isEnabled = false
+        backLabel.icon = bgAfterIcon
+
+        cookieButton.isVisible = true
+    }
+
+    private fun handleCookieClick() {
+        cookieButton.isEnabled = false
+        cookieButton.isVisible = false
+
+
+        app.cookieCollected()
+        owner.checkIfGameWon()
     }
 
     fun updateUI() {
