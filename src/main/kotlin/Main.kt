@@ -137,7 +137,7 @@ class MainWindow(val app: App) {
         computerButton.isBorderPainted = false
         computerButton.isFocusPainted = false
         computerButton.isContentAreaFilled = false
-        computerButton.isEnabled = false
+//        computerButton.isEnabled = false
         computerButton.disabledIcon = computerLockedIcon
 
         solitaireButton.verticalTextPosition = SwingConstants.BOTTOM
@@ -953,7 +953,7 @@ class ComputerWindow(val owner: MainWindow, val app: App) {
         backLabel.setBounds(0, 0, 450, 600)
         backLabel.icon = bgIcon
 
-        targetButton.setBounds(0, 0, 450, 600)
+        targetButton.setBounds(300, 500, 250, 60)
         targetButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
 
         panel.add(targetButton)
