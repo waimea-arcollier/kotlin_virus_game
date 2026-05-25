@@ -2,6 +2,8 @@ import java.awt.Cursor
 import javax.swing.*
 import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.LineEvent
+import java.awt.Color
+import java.awt.Font
 
 
 fun ImageIcon.scaled(width: Int, height: Int): ImageIcon =//Scaling images for icons
@@ -54,6 +56,7 @@ class App {
  */
 class MainWindow(val app: App) {
     val frame = JFrame("WINDOWS XP HOME")
+    //icons
     val computerLockedIcon = ImageIcon(ClassLoader.getSystemResource("images/computer-locked-icon.png")).scaled(80, 80)
     val computerIcon = ImageIcon(ClassLoader.getSystemResource("images/computer-icon.png")).scaled(80, 80)
     val solitaireIcon = ImageIcon(ClassLoader.getSystemResource("images/solitaire-icon.png")).scaled(80, 80)
@@ -61,32 +64,34 @@ class MainWindow(val app: App) {
     val notesIcon = ImageIcon(ClassLoader.getSystemResource("images/notes-icon.png")).scaled(80, 80)
     val galleryIcon = ImageIcon(ClassLoader.getSystemResource("images/gallery-icon.png")).scaled(80, 80)
     val bonziIcon = ImageIcon(ClassLoader.getSystemResource("images/bonzi-icon.png")).scaled(80, 80)
+
     private val panel = JPanel().apply { layout = null }
 
-    private val soundEffects: List<ByteArray> = listOf("click.wav", "error.wav", "startup.wav", "bgmusic.wav")
+    private val soundEffects: List<ByteArray> = listOf("click.wav", "error.wav", "startup.wav", "bgmusic.wav")//load sound effects
         .map { name -> ClassLoader.getSystemResourceAsStream("sounds/$name")!!.readBytes() }
 
+    private var cookieLabel = JLabel("Cookies Collected: 0/5")
     private var bgLabel = JLabel()
 
     private val computerButton = JButton("My Computer", computerIcon)
-    private val computerWindow = ComputerWindow(this, app)
+    private val computerWindow = ComputerWindow(this, app)       // Pass app state to dialog too
 
     private val solitaireButton = JButton("Solitaire", solitaireIcon)
-    private val solitaireWindow = SolitaireWindow(this, app)      // Pass app state to dialog too
+    private val solitaireWindow = SolitaireWindow(this, app)    // Pass app state to dialog too
 
     private val minesweeperButton = JButton("Minesweeper", minesweeperIcon)
-    private val minesweeperWindow = MinesweeperWindow(this, app)
+    private val minesweeperWindow = MinesweeperWindow(this, app)    // Pass app state to dialog too
 
     private val notesButton = JButton("Notes", notesIcon)
-    private val notesWindow = NotesWindow(this, app)
+    private val notesWindow = NotesWindow(this, app)    // Pass app state to dialog too
 
     private val galleryButton = JButton("Gallery", galleryIcon)
-    private val galleryWindow = GalleryWindow(this, app)
+    private val galleryWindow = GalleryWindow(this, app)    // Pass app state to dialog too
 
     private val bonziButton = JButton("Bonzi Buddy", bonziIcon)
-    private val bonziWindow = BonziWindow(this, app)
+    private val bonziWindow = BonziWindow(this, app)    // Pass app state to dialog too
 
-    private val winTimer = Timer(2000, null)
+    private val winTimer = Timer(2000, null) //2 second timer
 
     init {
         setupWindow()
@@ -98,29 +103,32 @@ class MainWindow(val app: App) {
     }
 
     private fun setupLayout() {
-        val bgIcon = ImageIcon(ClassLoader.getSystemResource("images/main-bg.png")).scaled(frame.width, frame.height)
         panel.preferredSize = java.awt.Dimension(400, 1000)
+
+        val bgIcon = ImageIcon(ClassLoader.getSystemResource("images/main-bg.png")).scaled(panel.width, panel.height)
         bgLabel.icon = bgIcon
 
-        bgLabel.setBounds(0, 0, frame.width, frame.height)
+        bgLabel.setBounds(0, 0, panel.width, panel.height)
 
         computerButton.setBounds(10, 10, 80, 100)
-        computerButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        computerButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)//change cursor on hover
 
         solitaireButton.setBounds(10, 300, 80, 100)
-        solitaireButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        solitaireButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)//change cursor on hover
 
         minesweeperButton.setBounds(10, 190, 80, 100)
-        minesweeperButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        minesweeperButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)//change cursor on hover
 
         notesButton.setBounds(10, 90, 80, 100)
-        notesButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        notesButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)//change cursor on hover
 
         galleryButton.setBounds(10, 400, 80, 100)
-        galleryButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        galleryButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)//change cursor on hover
 
         bonziButton.setBounds(10, 500, 80, 100)
-        bonziButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        bonziButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)//change cursor on hover
+
+        cookieLabel.setBounds((panel.width +250)*4/6, panel.height -30, 250, 20)
 
         panel.add(bgLabel)
         bgLabel.add(computerButton)
@@ -129,16 +137,18 @@ class MainWindow(val app: App) {
         bgLabel.add(notesButton)
         bgLabel.add(galleryButton)
         bgLabel.add(bonziButton)
+        bgLabel.add(cookieLabel)
     }
 
     private fun setupStyles() {
+
         computerButton.verticalTextPosition = SwingConstants.BOTTOM
         computerButton.horizontalTextPosition = SwingConstants.CENTER
         computerButton.isBorderPainted = false
         computerButton.isFocusPainted = false
         computerButton.isContentAreaFilled = false
-//        computerButton.isEnabled = false
-        computerButton.disabledIcon = computerLockedIcon
+        computerButton.isEnabled = false
+        computerButton.disabledIcon = computerLockedIcon   // different icon when disabled
 
         solitaireButton.verticalTextPosition = SwingConstants.BOTTOM
         solitaireButton.horizontalTextPosition = SwingConstants.CENTER
@@ -170,6 +180,9 @@ class MainWindow(val app: App) {
         bonziButton.isFocusPainted = false
         bonziButton.isContentAreaFilled = false
 
+        cookieLabel.foreground = Color.WHITE
+        cookieLabel.font = Font(Font.MONOSPACED, Font.BOLD, 16)
+
         bgLabel.isVisible = true
     }
 
@@ -179,10 +192,10 @@ class MainWindow(val app: App) {
         frame.contentPane = panel                           // Define the main content\
         frame.pack()
         val screenSize = java.awt.Toolkit.getDefaultToolkit().screenSize
-        frame.setSize(screenSize.width, screenSize.height)
+        frame.setSize(screenSize.width, screenSize.height)//making it "full screen"
     }
 
-    private fun setupActions() {
+    private fun setupActions() { //Provide actions for each button click
         computerButton.addActionListener { handleComClick() }
         solitaireButton.addActionListener { handleSolClick() }
         minesweeperButton.addActionListener { handleMineClick() }
@@ -192,6 +205,9 @@ class MainWindow(val app: App) {
         winTimer.addActionListener { handleWinTimer() }
     }
 
+    /**
+     * First win sequence, begins after timer delay
+     */
     private fun handleWinTimer() {
         // We want to clear the screen now
         solitaireWindow.hide()
@@ -277,18 +293,27 @@ class MainWindow(val app: App) {
         minesweeperWindow.show()
     }
 
+    /**
+     * Notes app click handler
+     */
     private fun handleNoteClick() {
         playSound(soundEffects[0])
         notesWindow.dialog.setLocation(200,100)
         notesWindow.show()
     }
 
+    /**
+     * Gallery click handler
+     */
     private fun handleGalClick() {
         playSound(soundEffects[0])
         galleryWindow.dialog.setLocation(150,300)
         galleryWindow.show()
     }
 
+    /**
+     * Bonzi Buddy click handler
+     */
     private fun handleBonClick() {
         playSound(soundEffects[0])
         bonziWindow.dialog.setLocation(800,400)
@@ -296,29 +321,29 @@ class MainWindow(val app: App) {
     }
 
     fun updateUI() {
-        computerWindow.updateUI()
-        solitaireWindow.updateUI() // Keep child dialog window UI up-to-date too
-        minesweeperWindow.updateUI()
-        notesWindow.updateUI()
-        galleryWindow.updateUI()
-        bonziWindow.updateUI()
+        cookieLabel.text = "Cookies Collected: ${app.cookiesFound}/5"//update cookie count display
     }
 
     fun show() {
         frame.isVisible = true
     }
 
-    fun checkIfAllFound() {
+    fun checkIfAllFound() { //check if all cookies have been found, if yes, begin winTimer if no, do nothing
+        updateUI()
+
         if (app.allFound()) {
             winTimer.start()
         }
     }
 
+    /**
+     * Final win sequence that ends the game
+     */
     fun shutDown() {
         val bluescreenIcon = ImageIcon(ClassLoader.getSystemResource("images/bluescreen.png")).scaled(frame.width, frame.height)
 
         if (app.allFound()) {
-            //We want to make sure everything is still hidden, and hide the computer window
+            //Hide any windows that may be open
             computerWindow.hide()
             solitaireWindow.hide()
             minesweeperWindow.hide()
@@ -326,16 +351,17 @@ class MainWindow(val app: App) {
             galleryWindow.hide()
             bonziWindow.hide()
 
-            //Final messaage (win message)
-            JOptionPane.showMessageDialog(null, "Computer security compromised!! Immediate shutdown inevitable! Malware has completely taken over!", "ERROR",  JOptionPane.ERROR_MESSAGE )
+            //Final message (win message)
+            JOptionPane.showMessageDialog(null, "Computer security compromised!! Immediate shutdown inevitable! Malware has completely taken over!", "FATAL ERROR",  JOptionPane.ERROR_MESSAGE )
 
-            //Disable and hide all buttons
+            //Disable and hide all buttons & labels
             computerButton.isVisible = false
             solitaireButton.isVisible = false
             minesweeperButton.isVisible = false
             notesButton.isVisible = false
             galleryButton.isVisible = false
             bonziButton.isVisible = false
+            cookieLabel.isVisible = false
 
             computerButton.isEnabled = false
             solitaireButton.isEnabled = false
@@ -344,7 +370,7 @@ class MainWindow(val app: App) {
             galleryButton.isEnabled = false
             bonziButton.isEnabled = false
 
-            //Show bluescreen
+            //Show win screen
             bgLabel.icon = bluescreenIcon
         }
     }
@@ -362,7 +388,7 @@ class SolitaireWindow(val owner: MainWindow, val app: App) {
     val dialog = JDialog(owner.frame, "Solitaire", false)
     private val panel = JPanel().apply { layout = null }
 
-    private val soundEffects: List<ByteArray> = listOf("click.wav", "cookiefound.wav", "glitch.wav")
+    private val soundEffects: List<ByteArray> = listOf("click.wav", "cookiefound.wav", "glitch.wav")//load sound effects
         .map { name -> ClassLoader.getSystemResourceAsStream("sounds/$name")!!.readBytes() }
 
     private val backLabel = JLabel()
@@ -380,12 +406,10 @@ class SolitaireWindow(val owner: MainWindow, val app: App) {
         bgInfectedIcon = ImageIcon(ClassLoader.getSystemResource("images/solitaire-infected.png")).scaled(600,450)
         cookieImageIcon = ImageIcon(ClassLoader.getSystemResource("images/cookie-4.png")).scaled(60, 60)
 
-
         setupLayout()
         setupStyles()
         setupActions()
         setupWindow()
-        updateUI()
     }
 
     fun hide() {
@@ -399,10 +423,10 @@ class SolitaireWindow(val owner: MainWindow, val app: App) {
         backLabel.icon = bgBeforeIcon
 
         targetButton.setBounds(20, 10, 70, 100)
-        targetButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        targetButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)//cursor changes on hover
 
         cookieButton.setBounds(25, 30, 60, 60)
-        cookieButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        cookieButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)//cursor changes on hover
         cookieButton.icon = cookieImageIcon
 
         panel.add(cookieButton)
@@ -432,33 +456,38 @@ class SolitaireWindow(val owner: MainWindow, val app: App) {
 
     private fun setupActions() {
         targetButton.addActionListener {handleTargetClick()}
-
-
         cookieButton.addActionListener {handleCookieClick()}
     }
 
+    /**
+     * Handles discoverable item click
+     */
     private fun handleTargetClick() {
         playSound(soundEffects[0])
         playSound(soundEffects[1])
+        // Don't want them to click again
         targetButton.isEnabled = false
+        // show found state
         backLabel.icon = bgAfterIcon
-
+        // reveal cookie
         cookieButton.isVisible = true
     }
 
+    /**
+     * Handles cookie click
+     */
     private fun handleCookieClick() {
         playSound(soundEffects[0])
         playSound(soundEffects[2])
+        //Remove the cookie so they cannot collect it twice
         cookieButton.isEnabled = false
         cookieButton.isVisible = false
+        // show infected state
         backLabel.icon = bgInfectedIcon
-
+        // count the cookie
         app.cookieCollected()
+        // check if all cookies found
         owner.checkIfAllFound()
-    }
-
-    fun updateUI() {
-
     }
 
     fun show() {
@@ -477,7 +506,7 @@ class MinesweeperWindow(val owner: MainWindow, val app: App) {
     val dialog = JDialog(owner.frame, "Minesweeper", false)
     private val panel = JPanel().apply { layout = null }
 
-    private val soundEffects: List<ByteArray> = listOf("click.wav", "cookiefound.wav", "glitch.wav")
+    private val soundEffects: List<ByteArray> = listOf("click.wav", "cookiefound.wav", "glitch.wav")//load sound effects
         .map { name -> ClassLoader.getSystemResourceAsStream("sounds/$name")!!.readBytes() }
 
     private val backLabel = JLabel()
@@ -499,7 +528,6 @@ class MinesweeperWindow(val owner: MainWindow, val app: App) {
         setupStyles()
         setupActions()
         setupWindow()
-        updateUI()
     }
 
     fun hide() {
@@ -513,10 +541,10 @@ class MinesweeperWindow(val owner: MainWindow, val app: App) {
         backLabel.icon = bgBeforeIcon
 
         targetButton.setBounds(50, 100, 200, 200)
-        targetButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        targetButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)//cursor changes on hover
 
         cookieButton.setBounds(85, 135, 125, 125)
-        cookieButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        cookieButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)//cursor changes on hover
         cookieButton.icon = cookieImageIcon
 
         panel.add(cookieButton)
@@ -550,28 +578,35 @@ class MinesweeperWindow(val owner: MainWindow, val app: App) {
         cookieButton.addActionListener {handleCookieClick()}
     }
 
+    /**
+     * Handles discoverable item click
+     */
     private fun handleTargetClick() {
         playSound(soundEffects[0])
         playSound(soundEffects[1])
+        // Don't want them to click again as it would show the cookie again
         targetButton.isEnabled = false
+        // show found state
         backLabel.icon = bgAfterIcon
-
+        // Show that cookie!
         cookieButton.isVisible = true
     }
 
+    /**
+     * Handles cookie click
+     */
     private fun handleCookieClick() {
         playSound(soundEffects[0])
         playSound(soundEffects[2])
+        //Remove the cookie so they cannot collect it twice
         cookieButton.isEnabled = false
         cookieButton.isVisible = false
+        // show infected state
         backLabel.icon = bgInfectedIcon
-
+        // count the cookie
         app.cookieCollected()
+        // check if all cookies found
         owner.checkIfAllFound()
-    }
-
-    fun updateUI() {
-
     }
 
     fun show() {
@@ -590,7 +625,7 @@ class NotesWindow(val owner: MainWindow, val app: App) {
     val dialog = JDialog(owner.frame, "Notes", false)
     private val panel = JPanel().apply { layout = null }
 
-    private val soundEffects: List<ByteArray> = listOf("click.wav", "cookiefound.wav", "glitch.wav")
+    private val soundEffects: List<ByteArray> = listOf("click.wav", "cookiefound.wav", "glitch.wav")//load sound effects
         .map { name -> ClassLoader.getSystemResourceAsStream("sounds/$name")!!.readBytes() }
 
     private val backLabel = JLabel()
@@ -612,7 +647,6 @@ class NotesWindow(val owner: MainWindow, val app: App) {
         setupStyles()
         setupActions()
         setupWindow()
-        updateUI()
     }
 
     fun hide() {
@@ -626,10 +660,10 @@ class NotesWindow(val owner: MainWindow, val app: App) {
         backLabel.icon = bgBeforeIcon
 
         targetButton.setBounds(50, 200, 150, 50)
-        targetButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        targetButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)//cursor changes on hover
 
         cookieButton.setBounds(80, 200, 50, 50)
-        cookieButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        cookieButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)//cursor changes on hover
         cookieButton.icon = cookieImageIcon
 
         panel.add(cookieButton)
@@ -663,28 +697,35 @@ class NotesWindow(val owner: MainWindow, val app: App) {
         cookieButton.addActionListener {handleCookieClick()}
     }
 
+    /**
+     * Handles discoverable item click
+     */
     private fun handleTargetClick() {
         playSound(soundEffects[0])
         playSound(soundEffects[1])
+        // Don't want them to click again as it would show the cookie again
         targetButton.isEnabled = false
+        // show found state
         backLabel.icon = bgAfterIcon
-
+        // Show that cookie!
         cookieButton.isVisible = true
     }
 
+    /**
+     * Handles cookie click
+     */
     private fun handleCookieClick() {
         playSound(soundEffects[0])
         playSound(soundEffects[2])
+        //Remove the cookie so they cannot collect it twice
         cookieButton.isEnabled = false
         cookieButton.isVisible = false
+        // show infected state
         backLabel.icon = bgInfectedIcon
-
+        // count the cookie
         app.cookieCollected()
+        // check if all cookies found
         owner.checkIfAllFound()
-    }
-
-    fun updateUI() {
-
     }
 
     fun show() {
@@ -703,7 +744,7 @@ class GalleryWindow(val owner: MainWindow, val app: App) {
     val dialog = JDialog(owner.frame, "Gallery", false)
     private val panel = JPanel().apply { layout = null }
 
-    private val soundEffects: List<ByteArray> = listOf("click.wav", "cookiefound.wav", "glitch.wav")
+    private val soundEffects: List<ByteArray> = listOf("click.wav", "cookiefound.wav", "glitch.wav")//load sound effects
         .map { name -> ClassLoader.getSystemResourceAsStream("sounds/$name")!!.readBytes() }
 
     private val backLabel = JLabel()
@@ -725,7 +766,7 @@ class GalleryWindow(val owner: MainWindow, val app: App) {
         setupStyles()
         setupActions()
         setupWindow()
-        updateUI()
+
     }
 
     fun hide() {
@@ -739,10 +780,10 @@ class GalleryWindow(val owner: MainWindow, val app: App) {
         backLabel.icon = bgBeforeIcon
 
         targetButton.setBounds(530, 290, 70, 60)
-        targetButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        targetButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)//cursor changes on hover
 
         cookieButton.setBounds(150, 275, 125, 125)
-        cookieButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        cookieButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)//cursor changes on hover
         cookieButton.icon = cookieImageIcon
 
         panel.add(cookieButton)
@@ -776,28 +817,35 @@ class GalleryWindow(val owner: MainWindow, val app: App) {
         cookieButton.addActionListener {handleCookieClick()}
     }
 
+    /**
+     * Handles discoverable item click
+     */
     private fun handleTargetClick() {
         playSound(soundEffects[0])
         playSound(soundEffects[1])
+        // Don't want them to click again as it would show the cookie again
         targetButton.isEnabled = false
+        // show found state
         backLabel.icon = bgAfterIcon
-
+        // Show that cookie!
         cookieButton.isVisible = true
     }
 
+    /**
+     * Handles cookie click
+     */
     private fun handleCookieClick() {
         playSound(soundEffects[0])
         playSound(soundEffects[2])
+        //Remove the cookie so they cannot collect it twice
         cookieButton.isEnabled = false
         cookieButton.isVisible = false
+        // show infected state
         backLabel.icon = bgInfectedIcon
-
+        // count the cookie
         app.cookieCollected()
+        // check if all cookies found
         owner.checkIfAllFound()
-    }
-
-    fun updateUI() {
-
     }
 
     fun show() {
@@ -816,7 +864,7 @@ class BonziWindow(val owner: MainWindow, val app: App) {
     val dialog = JDialog(owner.frame, "Bonzi Buddy Install", false)
     private val panel = JPanel().apply { layout = null }
 
-    private val soundEffects: List<ByteArray> = listOf("click.wav", "cookiefound.wav", "glitch.wav")
+    private val soundEffects: List<ByteArray> = listOf("click.wav", "cookiefound.wav", "glitch.wav")//load sound effects
         .map { name -> ClassLoader.getSystemResourceAsStream("sounds/$name")!!.readBytes() }
 
     private val backLabel = JLabel()
@@ -838,7 +886,7 @@ class BonziWindow(val owner: MainWindow, val app: App) {
         setupStyles()
         setupActions()
         setupWindow()
-        updateUI()
+
     }
 
     fun hide() {
@@ -852,10 +900,10 @@ class BonziWindow(val owner: MainWindow, val app: App) {
         backLabel.icon = bgBeforeIcon
 
         targetButton.setBounds(200, 360, 140, 30)
-        targetButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        targetButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)//cursor changes on hover
 
         cookieButton.setBounds(550, 170, 125, 125)
-        cookieButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        cookieButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)//cursor changes on hover
         cookieButton.icon = cookieImageIcon
 
         panel.add(cookieButton)
@@ -889,31 +937,36 @@ class BonziWindow(val owner: MainWindow, val app: App) {
         cookieButton.addActionListener {handleCookieClick()}
     }
 
+    /**
+     * Handles discoverable item click
+     */
     private fun handleTargetClick() {
         playSound(soundEffects[0])
         playSound(soundEffects[1])
 
-        // Make sure we can't click again
+        // Don't want them to click again as it would show the cookie again
         targetButton.isEnabled = false
+        // show found state
         backLabel.icon = bgAfterIcon
-
-        // Shoiw that cookie!
+        // Show that cookie!
         cookieButton.isVisible = true
     }
 
+    /**
+     * Handles cookie click
+     */
     private fun handleCookieClick() {
         playSound(soundEffects[0])
         playSound(soundEffects[2])
+        //Remove the cookie so they cannot collect it twice
         cookieButton.isEnabled = false
         cookieButton.isVisible = false
-
+        // show infected state
         backLabel.icon = bgInfectedIcon
+        // count the cookie
         app.cookieCollected()
+        // check if all cookies found
         owner.checkIfAllFound()
-    }
-
-    fun updateUI() {
-
     }
 
     fun show() {
@@ -921,11 +974,17 @@ class BonziWindow(val owner: MainWindow, val app: App) {
     }
 }
 
+/**
+ * Info UI window is a child dialog and shows how the
+ * app state can be shown / updated from multiple places
+ *
+ * @param owner the parent frame, used to position and layer the dialog correctly
+ */
 class ComputerWindow(val owner: MainWindow, val app: App) {
     val dialog = JDialog(owner.frame, "Computer Administrator Menu", false)
     private val panel = JPanel().apply { layout = null }
 
-    private val soundEffects: List<ByteArray> = listOf("click.wav", "glitch.wav")
+    private val soundEffects: List<ByteArray> = listOf("click.wav", "glitch.wav")//load sound effects
         .map { name -> ClassLoader.getSystemResourceAsStream("sounds/$name")!!.readBytes() }
 
     private val backLabel = JLabel()
@@ -940,7 +999,6 @@ class ComputerWindow(val owner: MainWindow, val app: App) {
         setupStyles()
         setupActions()
         setupWindow()
-        updateUI()
     }
 
     fun hide() {
@@ -954,7 +1012,7 @@ class ComputerWindow(val owner: MainWindow, val app: App) {
         backLabel.icon = bgIcon
 
         targetButton.setBounds(300, 500, 250, 60)
-        targetButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
+        targetButton.cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)//cursor changes on hover
 
         panel.add(targetButton)
         panel.add(backLabel)
@@ -979,16 +1037,16 @@ class ComputerWindow(val owner: MainWindow, val app: App) {
         targetButton.addActionListener {handleTargetClick()}
     }
 
+    /**
+     * Handles discoverable item click
+     */
     private fun handleTargetClick() {
         playSound(soundEffects[0])
         playSound(soundEffects[1])
+        // run final win messages
         owner.shutDown()
-        // Make sure we can't click again
+        // Don't allow them to click it again
         targetButton.isEnabled = false
-    }
-
-    fun updateUI() {
-
     }
 
     fun show() {

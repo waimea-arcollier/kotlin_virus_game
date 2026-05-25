@@ -26,7 +26,7 @@ The program stores data using:
 
 The program structure:
 - [x] Defines and implements a **graphical user interface (GUI)**
-- [ ] Makes use of user-defined OOP **classes** from which **objects** are instantiated
+- [x] Makes use of user-defined OOP **classes** from which **objects** are instantiated
 - [x] Uses **functions** / **methods** to break up the code logically
 - [x] Contains **sequences** of instructions
 - [x] Uses **conditional** instructions to control the program flow
@@ -36,8 +36,8 @@ The program structure:
 ### Program Documentation
 
 The program code:
-- [ ] Is **indented** correctly
-- [ ] Is **laid-out clearly**
+- [x] Is **indented** correctly
+- [x] Is **laid-out clearly**
 - [ ] Contains **comments** that help in understanding how it works
 
 ### Program Testing

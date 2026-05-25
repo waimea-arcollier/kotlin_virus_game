@@ -1,15 +1,13 @@
-# PROJECT NAME HERE
+# Virus Game
 
-by YOUR NAME HERE
+by Amber Collier
 
 ## Project Description
 
-**PLACE YOUR PROJECT DESCRIPTION HERE**
-**PLACE YOUR PROJECT DESCRIPTION HERE**
-**PLACE YOUR PROJECT DESCRIPTION HERE**
-**PLACE YOUR PROJECT DESCRIPTION HERE**
-**PLACE YOUR PROJECT DESCRIPTION HERE**
-
+**This is a point and click game where you pay as a virus in a computer.**
+**In each of the app windows you have to find a clickable element. once clicked the cookie will appear.**
+**You must find all 5 "cookies" to unlock the My Computer app.**
+**Once in the computer app you click the shutdown button to complete the game.**
 ---
 
 ## Project Files
@@ -28,12 +26,8 @@ The project is written in the [Kotlin](https://kotlinlang.org) programming langu
 *complex programming techniques**:
 
 - Programming a graphical user interface (GUI)
-- Reading from, or writing to, files
 - Object-oriented programming (OOP) classes and objects
 - Self-defined types
 - Using non-core API, library or framework
-- Using complex data structures (e.g. stacks, queues, trees)
-
-**EDIT LIST ABOVE TO MATCH YOUR PROJECT**
 
 
