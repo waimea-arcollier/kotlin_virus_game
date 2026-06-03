@@ -1,3 +1,17 @@
+/**
+ * =====================================================================
+ * Programming Project for NCEA Level 3, Standard 91906
+ * ---------------------------------------------------------------------
+ * Project Name:   Virus Game
+ * Project Author: Amber Collier
+ * GitHub Repo:    https://github.com/waimea-arcollier/kotlin_virus_game
+ * ---------------------------------------------------------------------
+ * Notes:
+ * PROJECT NOTES HERE
+ * =====================================================================
+ */
+
+
 import java.awt.Cursor
 import javax.swing.*
 import javax.sound.sampled.AudioSystem
@@ -91,7 +105,7 @@ class MainWindow(val app: App) {
     private val bonziButton = JButton("Bonzi Buddy", bonziIcon)
     private val bonziWindow = BonziWindow(this, app)    // Pass app state to dialog too
 
-    private val winTimer = Timer(2000, null) //2 second timer
+    private val winTimer = Timer(2000, null) //2-second timer
 
     init {
         setupWindow()

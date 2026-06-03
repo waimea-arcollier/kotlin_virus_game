@@ -31,14 +31,15 @@ The program structure:
 - [x] Contains **sequences** of instructions
 - [x] Uses **conditional** instructions to control the program flow
 - [x] Uses program **branches** (if...else, when, etc.)
-- [ ] Uses **iteration** (loops) to repeat things (for, while, etc.)
+
+[//]: # (- [ ] Uses **iteration** &#40;loops&#41; to repeat things &#40;for, while, etc.&#41;)
 
 ### Program Documentation
 
 The program code:
 - [x] Is **indented** correctly
 - [x] Is **laid-out clearly**
-- [ ] Contains **comments** that help in understanding how it works
+- [x] Contains **comments** that help in understanding how it works
 
 ### Program Testing
 
@@ -121,7 +122,7 @@ Program flexibility and maintainability is aided by good program structure:
 
 The game GUI:
 - [ ] Is **well laid out** with care and attention paid to details
-- [ ] Gives a **good uer experience (UX)**
+- [ ] Gives a **good user experience (UX)**
 
 ### Program Documentation
 
