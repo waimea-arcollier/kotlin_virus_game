@@ -32,9 +32,9 @@ Main window opens after completing tutorial.
 
 ### Test Result
 
-![example.png](screenshots/example.png)
+![main-window-boundary.gif](screenshots/main-window-boundary.gif)
 
-Comment on test result. Comment on test result. Comment on test result. Comment on test result. Comment on test result. Comment on test result.
+The main window opens with all child windows closed, the "my computer" button is disabled, and cookies start at 0/5 without crashing
 
 ---
 
@@ -52,9 +52,9 @@ open & close child windows, move windows
 
 ### Test Result
 
-![example.png](screenshots/example.png)
+![child-windows-open.gif](screenshots/child-windows-open.gif)
 
-Comment on test result. Comment on test result. Comment on test result. Comment on test result. Comment on test result. Comment on test result.
+Buttons for each child window opens the corresponding window, buttons are within bound of their icon image. The windows can only open once and pressing the button again has no affect. Hovering over buttons shows that it is clickable. Child windows move when dragged, close on click of exit button, and reopen without errors or any states changing prematurely.
 
 ---
 
@@ -70,9 +70,9 @@ Target buttons are invisible and in correct areas
 
 ### Test Result
 
-![example.png](screenshots/example.png)
+![target-buttons-function.gif](screenshots/target-buttons-function.gif)
 
-Comment on test result. Comment on test result. Comment on test result. Comment on test result. Comment on test result. Comment on test result.
+Clicking outside bounds of the target does nothing. Hovering over target shows that it is clickable. Clicking within the target disables the button, changes the child window state and shows the cookie.
 
 ---
 
