@@ -114,7 +114,7 @@ BOUNDARY: All cookies are collected, 5/5
 
 ### Expected Test Result
 
-When the cookie count reaches 5/5 cookies, no crashes should occur. Each window should close and a dialog window should pop up. After dialog is dismissed, the computer app should be enabled
+When the cookie count reaches 5/5 cookies, no crashes should occur. Each window should close and a dialog window should pop up. After dialog is dismissed, the computer app should be enabled. All other windows should remain functional and maintain state after the game has progressed
 
 ---
 

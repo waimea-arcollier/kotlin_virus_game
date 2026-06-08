@@ -87,9 +87,9 @@ Cookie collects when clicked
 - VALID: click inside cookie
 ### Test Result
 
-![example.png](screenshots/example.png)
+![cookies-work](screenshots/cookies-work.gif)
 
-Comment on test result. Comment on test result. Comment on test result. Comment on test result. Comment on test result. Comment on test result.
+Clicking outside bounds of the cookie does nothing. Hovering over cookie shows that it is clickable. Clicking within the cookie disables and hides the button, changes the child window state and adds one to the to cookie count.
 
 ---
 
@@ -103,24 +103,26 @@ Close & reopen window after target clicked. Close & reopen window after cookie c
 
 ### Test Result
 
-![example.png](screenshots/example.png)
+![windows-maintain.gif](screenshots/windows-maintain.gif)
 
-Comment on test result. Comment on test result. Comment on test result. Comment on test result. Comment on test result. Comment on test result.
+Window maintains state after it has been changed, reopening shows the same state the window was closed in. Works for both possible states (after & infected)
 
 ---
 
-## Gameplay: Game progresses when all cookies are collected - BOUNDARY
+## Gameplay: Game progresses & functions when all cookies are collected - BOUNDARY
 
 When all cookies have been collected, the game progresses to the next step
 
 ### Test Data To Use
 
+Reopen windows, test windows
 BOUNDARY: All cookies are collected, 5/5
+
 ### Test Result
 
-![example.png](screenshots/example.png)
+![game-progresses.gif](screenshots/game-progresses.gif)
 
-Comment on test result. Comment on test result. Comment on test result. Comment on test result. Comment on test result. Comment on test result.
+When the cookie count reaches 5/5 cookies, no crashes occur. Each window closes and a dialog window pops up. After dialog is dismissed, the computer app should is enabled, shown by the icon changing. All other windows remain functional and maintain state after the game has progressed
 
 ---
 
@@ -134,12 +136,12 @@ open & close window, move window
 
 - VALID: click within button
 - BOUNDARY: hover button bounds
-- INVALID: click outside of button
+- INVALID: click outside of button, try to open window multiple times
 ### Test Result
 
-![example.png](screenshots/example.png)
+![computer-window-and-game-end.gif](screenshots/computer-window-and-game-end.gif)
 
-Comment on test result. Comment on test result. Comment on test result. Comment on test result. Comment on test result. Comment on test result.
+Computer window opens and closes without changing or breaking, window button bounds match icon, window is movable. Hovering over button shows it is clickable.
 
 ---
 
@@ -150,14 +152,14 @@ When shut down button is pressed the game end is run
 ### Test Data To Use
 
 BOUNDARY: Shut down button bounds
-INVALID: click outside button, try to click again, click outside dialog, close dialog with x, try to click on end screen
+INVALID: click outside button, click outside dialog, close dialog with x, try to click on end screen
 VALID: click inside button
 
 ### Test Result
 
-![example.png](screenshots/example.png)
+![computer-window-and-game-end.gif](screenshots/computer-window-and-game-end.gif)
 
-Comment on test result. Comment on test result. Comment on test result. Comment on test result. Comment on test result. Comment on test result.
+Clicking outside bounds of the button does nothing. Hovering over button shows that it is clickable. Clicking within the button disables the button, closes the computer window, disables all main window buttons, displays dialog, progresses even with dialog x press, and win screen displays without any leftover buttons.
 
 ---
 
